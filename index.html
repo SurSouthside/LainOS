@@ -1,0 +1,197 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+   <meta name="author"             content="Alan G. Labouseur (with improvements by Stuart South)" />
+   <link rel="stylesheet" href="lainos.css" type="text/css" media="screen" />
+   <title>
+      Lain OS - Welcome to the Wired
+   </title>
+
+   <!-- Globals CONSTANTS and _Variables. Must included be first. -->
+   <script type="text/javascript" src="scripts/utils.js"></script>	
+   <script type="text/javascript" src="globals.js"></script>	
+   
+   <script type="text/javascript" src="scripts/host/devices.js"></script>
+
+   <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
+   
+   <script type="text/javascript" src="scripts/os/canvastext.js"></script>	
+   <script type="text/javascript" src="scripts/os/console.js"></script>	
+   <script type="text/javascript" src="scripts/os/statusBar.js"></script>
+   <script type="text/javascript" src="scripts/os/deviceDriver.js"></script>
+   <script type="text/javascript" src="scripts/os/deviceDriverKeyboard.js"></script>
+   <script type="text/javascript" src="scripts/os/deviceDriverFSDD.js"></script>
+   <script type="text/javascript" src="scripts/os/queue.js"></script>
+   <script type="text/javascript" src="scripts/os/shell.js"></script>
+   <script type="text/javascript" src="scripts/os/pcb.js"></script>
+   <script type="text/javascript" src="scripts/os/tsb.js"></script>
+   <script type="text/javascript" src="scripts/os/memManager.js"></script>
+   <script type="text/javascript" src="scripts/os/cpuScheduler.js"></script>
+   <script type="text/javascript" src="scripts/os/interrupt.js"></script>
+   <script type="text/javascript" src="scripts/os/kernel.js"></script>
+   
+   <script type="text/javascript" src="scripts/host/control.js"></script>
+   <!-- Host (Hardware Simulation) Routines -->
+   
+   <script type="text/javascript" src="scripts/os/fsdd.js"></script>
+   <script type="text/javascript" src="scripts/host/cpuSim.js"></script>
+   <script type="text/javascript" src="scripts/host/memSim.js"></script>
+   <script type="text/javascript" src="scripts/host/memAccess.js"></script>   
+
+   <!-- Other Routines -->
+   
+   
+   
+</head>
+
+<body onload="simInit();">
+
+<table id="tableDisplay" style="border:1px solid white;">
+    <tr>
+        <td>
+            <input type="button"
+                   id = "btnStartOS"
+                   name="brnStartOS"
+                   class="normal_button"
+                   value="Start"
+                   tabindex="0"
+                   onclick="simBtnStartOS_click(this)"
+            />
+            <input type="button"
+                   id = "btnHaltOS"
+                   name="brnHaltOS"
+                   class="normal_button"
+                   disabled="disabled"
+                   value="Halt"
+                   tabindex="1"
+                   onclick="simBtnHaltOS_click(this)"
+            />            
+            <input type="button"
+                   id = "btnReset"
+                   name="brnReset"
+                   class="normal_button"
+                   disabled="disabled"
+                   value="Reset"
+                   tabindex="2"
+                   onclick="simBtnReset_click(this)"
+            /> 
+			<input type="button"
+                   id = "btnStep"
+                   name="brnStep"
+                   class="normal_button"
+                   disabled="disabled"
+                   value="Step"
+                   tabindex="3"
+                   onclick="simBtnStep_click(this)"
+            />
+			<label id ="storageLabel">
+			<label id="statusLabel"
+				   class= "label"> 
+				   Status Bar </label>
+			
+			</td>
+			</tr>
+			
+			<tr>
+			<td>
+			
+			<!--<canvas id="statusBar" class="statusBar"
+			></canvas>-->
+			
+			<label name="statusBarStatus"
+			          id="statusBarStatus"
+					  class="statusBarStatus"
+					  
+					  ></label>
+					  
+			<label name="statusBarDate"
+			          id="statusBarDate"
+					  class="statusBarDate"
+					  
+					  ></label>		  
+          	
+	   		
+        </td>
+    </tr>
+	
+    <tr valign="top">
+        <td id="tdDisplay" class="tdDisplay">
+            <canvas id="display"
+                    width="600px"
+                    height="500px"
+                    tabindex="3">
+            </canvas>
+			
+			<textarea name="programTxtBox"
+					  id="programTxtBox"
+					  class="prgmTextArea"
+					  align="left" 
+			></textarea>
+			<div id = "pcbRegs"
+		class = "pcbRegsDisplay">
+		</div>
+			<div id = "pcbPanel"
+			    class = "pcbPanelDisplay"
+				>
+				</div>
+        </td>
+		
+        <td id="tdLogs" class="tdLogs">
+		    <table>
+			<label id="ctrlLogLabel"
+				   class= "logLabel"> 
+				   Control Log </label>
+            <textarea name="ctrlLog"
+                      id = "ctrlLog"
+                      rows="18"
+                      cols="48"
+					  class="logDisplay"
+            ></textarea>
+        </td>
+		<div id = "cpuRegs"
+		class = "cpuRegsDisplay">
+		</div>
+		<div id = "cpuPanel"
+			    class = "cpuPanelDisplay"
+				>
+				</div>
+		<label id="memLogLabel"
+				   class= "logLabel"> 
+				   Memory Log </label>
+		<td id="tdMem">
+		
+            <textarea name="memLog"
+                      id = "memLog"
+                      rows="12"
+                      cols="48"
+					  class="mainMemDisplay"
+            ></textarea>
+        </td>
+			
+        </table>
+		    <td> <div id = "readyQueueDisplay"
+				class = "readyQueueDisplay">
+				</div>
+				</td>
+				<td> <div id = "residentListDisplay"
+				class = "residentListDisplay">
+				</div>
+				</td>
+    </tr>
+</table>
+
+<p></p>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr valign="top">
+        <td align="center" class="footer">
+            Copyright &copy; 2008 - 2012 No Rights Reserved. - 
+            Reproduction is prohibited without the express written consent of 
+            Eiri Masami and Tachibana Labs. Close the World, Open the nExt.
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
